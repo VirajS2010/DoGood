@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>DoGood — Community Created</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <script
+      defer
+      src="{{ url_for('static', filename='js/script.js') }}"
+    ></script>
+  </head>
+  <body class="green-solid">
+    <main class="center-stack">
+      <!-- Logo slightly above center -->
+      <div class="brand-mark">DoGood</div>
+
+      <section class="card">
+        <h1 class="h1">Community created 🎉</h1>
+        <p class="muted">“{{ name }}” is live. Share the code or link below.</p>
+
+        <div class="field">
+          <label class="label">Invite code</label>
+          <div class="row">
+            <input id="invite-code" class="input" value="{{ code }}" readonly />
+            <button class="btn ghost" onclick="copyById('invite-code', this)">
+              Copy
+            </button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Invite link</label>
+          <div class="row">
+            <input
+              id="invite-link"
+              class="input"
+              value="{{ invite_link }}"
+              readonly
+            />
+            <button class="btn ghost" onclick="copyById('invite-link', this)">
+              Copy
+            </button>
+          </div>
+        </div>
+
+        <div class="actions">
+          <a
+            class="btn primary"
+            href="{{ url_for('main.register', community_code=code) }}"
+            >Join this community</a
+          >
+          <a class="btn mono" href="{{ url_for('main.index') }}"
+            >Back to home</a
+          >
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>DoGood — Feed</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <script
+      defer
+      src="{{ url_for('static', filename='js/script.js') }}"
+    ></script>
+  </head>
+  <body class="green-solid feed-page">
+    <!-- Pill navbar (same on desktop & mobile, always visible) -->
+    <nav class="pill-nav">
+      <div class="pill-brand">DG</div>
+      <a href="{{ url_for('main.feed') }}" class="pill-link active">Feed</a>
+      <a href="{{ url_for('main.leaderboard') }}" class="pill-link"
+        >Leaderboard</a
+      >
+      <a href="{{ url_for('main.create_post') }}" class="pill-link">Post</a>
+      <a href="{{ url_for('main.logout') }}" class="pill-link ghost">Logout</a>
+    </nav>
+
+    {% if not deeds %}
+    <main class="feed-empty-wrap">
+      <section class="empty-card elevate">
+        <div class="empty-emoji">🌱</div>
+        <h2 class="h2">No posts yet</h2>
+        <p class="muted">Be the first to spread some good in your community.</p>
+        <a href="{{ url_for('main.create_post') }}" class="btn primary"
+          >Create your first post</a
+        >
+      </section>
+    </main>
+    {% else %}
+    <!-- Reels viewport (scroll controlled via JS; CSS has snap fallback) -->
+    <main id="reels" class="reels-viewport">
+      <div class="reels-stack">
+        {% for d in deeds %}
+        <article class="reel-card glow" tabindex="0">
+          <div class="reel-media">
+            <img src="{{ d.photo_url }}" alt="post photo" loading="lazy" />
+          </div>
+
+          <div class="reel-meta">
+            <div class="author">
+              <img class="avatar" src="{{ d.author_pic }}" alt="" />
+              <div class="who">
+                <div class="name">
+                  {{ d.author_name }} {% if user.user_id == d.user_id %}
+                  <span class="you-pill">You</span>
+                  {% endif %}
+                </div>
+                <div class="time">{{ d.timestamp_fmt }}</div>
+              </div>
+            </div>
+            <div class="reel-caption">{{ d.description }}</div>
+          </div>
+
+          <div class="reel-actions">
+            {% if user.user_id != d.user_id %}
+            <a
+              href="{{ url_for('main.dislike', deed_id=d.deed_id) }}"
+              class="btn danger wide"
+            >
+              👎 Dislike • <b>{{ d.dislikes or 0 }}</b>
+            </a>
+            {% else %}
+            <div class="btn disabled wide">
+              👎 Dislikes • <b>{{ d.dislikes or 0 }}</b>
+            </div>
+            {% endif %}
+          </div>
+        </article>
+        {% endfor %}
+
+        <!-- Bottom spacer so the list can scroll fully and first reel never clips -->
+        <div class="reels-spacer"></div>
+      </div>
+    </main>
+    {% endif %}
+  </body>
+</html>

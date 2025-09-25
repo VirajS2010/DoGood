@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>DoGood — Join {{ community.name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Your global stylesheet -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+
+    <!-- Your global script file -->
+    <script
+      defer
+      src="{{ url_for('static', filename='js/script.js') }}"
+    ></script>
+  </head>
+  <body class="green-solid">
+    <main class="center-stack">
+      <!-- Smaller centered brand -->
+      <div class="brand-top">
+        <div class="brand-mark" style="font-size: 45px; margin-bottom: 8px">
+          DoGood
+        </div>
+      </div>
+
+      <section class="card">
+        <h1 class="h1" style="margin-bottom: 10px">
+          Join “{{ community.name }}”
+        </h1>
+        <p class="muted">
+          You’re accepting an invite to join <b>{{ community.name }}</b>. Create
+          your account below. (One account can belong to only one community.)
+        </p>
+
+        {% if error %}
+        <div class="alert">{{ error }}</div>
+        {% endif %}
+
+        <form
+          action=""
+          method="POST"
+          enctype="multipart/form-data"
+          class="stack form-tight"
+          style="margin-top: 12px"
+        >
+          <!-- Name -->
+          <div class="field">
+            <label class="label" for="name">Your name</label>
+            <input
+              id="name"
+              class="input big"
+              type="text"
+              name="name"
+              placeholder="Your full name"
+              required
+            />
+          </div>
+
+          <!-- Email -->
+          <div class="field">
+            <label class="label" for="email">Email</label>
+            <input
+              id="email"
+              class="input big"
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <!-- Password -->
+          <div class="field">
+            <label class="label" for="password">Password</label>
+            <input
+              id="password"
+              class="input big"
+              type="password"
+              name="password"
+              placeholder="Create a password"
+              minlength="6"
+              required
+            />
+          </div>
+
+          <!-- Profile photo -->
+          <div class="field profile-photo">
+            <label class="label" for="profile_pic"
+              >Profile photo (required)</label
+            >
+
+            <div class="file-row">
+              <!-- hidden native input -->
+              <input
+                id="profile_pic"
+                type="file"
+                name="profile_pic"
+                accept="image/*"
+                class="file-input"
+                onchange="showChosenFile(this)"
+                required
+              />
+              <!-- pretty trigger -->
+              <label for="profile_pic" class="btn ghost file-trigger"
+                >Choose Photo</label
+              >
+              <span id="file-name" class="file-name">No file selected</span>
+            </div>
+
+            <!-- circle preview below -->
+            <div id="preview" class="avatar-preview" aria-hidden="true"></div>
+          </div>
+
+          <!-- Submit -->
+          <!-- Submit -->
+          <button class="btn primary jumbo w-full" type="submit">
+            Create account &amp; join
+          </button>
+        </form>
+
+        <!-- back to home with spacing -->
+        <div class="register-actions">
+          <a href="{{ url_for('main.index') }}" class="btn ghost"
+            >← Back to Home</a
+          >
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

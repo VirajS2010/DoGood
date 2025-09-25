@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>DoGood — Create Post</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body class="green-solid feed-page">
+    <!-- Pill navbar (same as feed) -->
+    <nav class="pill-nav">
+      <div class="pill-brand">DG</div>
+      <a href="{{ url_for('main.feed') }}" class="pill-link">Feed</a>
+      <a href="{{ url_for('main.leaderboard') }}" class="pill-link ">Leaderboard</a>
+      <a href="{{ url_for('main.create_post') }}" class="pill-link active">Post</a>
+      <a href="{{ url_for('main.logout') }}" class="pill-link ghost">Logout</a>
+    </nav>
+
+    <!-- Page content below nav -->
+    <main class="feed-content">
+      <section class="post-card card glow">
+        <header class="post-head">
+          <h1 class="h1" style="margin:0;">Create a post</h1>
+          <p class="muted" style="margin:6px 0 0;">
+            Share a deed with your community. Add a photo and a short caption.
+          </p>
+        </header>
+
+        <form action="{{ url_for('main.create_post') }}" method="POST" enctype="multipart/form-data" class="stack form-tight" style="margin-top:16px;">
+          <!-- Photo uploader -->
+          <div class="field">
+            <label class="label" for="photo">Photo</label>
+
+            <div class="file-row" style="margin-top:6px;">
+              <input id="photo" type="file" name="photo" accept="image/*" class="file-input" required />
+              <label for="photo" class="btn ghost file-trigger">Choose Photo</label>
+              <span id="post-file-name" class="file-name">No file selected</span>
+            </div>
+
+            <div class="helper">Use a clear image (JPG/PNG). Big pics are fine—we’ll fit them nicely.</div>
+
+            <!-- Live preview (9:16 letterboxed) -->
+            <div id="post-preview" class="post-preview" aria-hidden="true">
+              <img id="post-preview-img" alt="Selected photo preview" />
+            </div>
+          </div>
+
+          <!-- Caption -->
+          <div class="field">
+            <label class="label" for="description">Caption</label>
+            <textarea
+              id="description"
+              name="description"
+              class="textarea"
+              rows="4"
+              placeholder="What happened? Add a short note…"
+              maxlength="600"
+              required
+            ></textarea>
+            <div class="helper" id="char-count">0 / 600</div>
+          </div>
+
+          <!-- Actions -->
+          <div class="form-actions center" style="margin-top:8px;">
+            <a href="{{ url_for('main.feed') }}" class="btn ghost">← Back to Feed</a>
+            <button class="btn primary jumbo" type="submit">Post</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <script>
+      // file name + preview
+      const input = document.getElementById('photo');
+      const nameEl = document.getElementById('post-file-name');
+      const preview = document.getElementById('post-preview');
+      const previewImg = document.getElementById('post-preview-img');
+
+      input.addEventListener('change', () => {
+        const file = input.files && input.files[0];
+        nameEl.textContent = file ? file.name : 'No file selected';
+        if (!file) {
+          preview.setAttribute('aria-hidden', 'true');
+          previewImg.removeAttribute('src');
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = e => {
+          previewImg.src = e.target.result;
+          preview.removeAttribute('aria-hidden');
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // caption char counter
+      const desc = document.getElementById('description');
+      const counter = document.getElementById('char-count');
+      const max = 600;
+      const updateCount = () => {
+        const n = (desc.value || '').length;
+        counter.textContent = `${n} / ${max}`;
+      };
+      desc.addEventListener('input', updateCount);
+      updateCount();
+    </script>
+  </body>
+</html>

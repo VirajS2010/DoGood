@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DoGood — Connect. Act. Win.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="green-solid">
+  <main class="center-stack">
+    <!-- Logo slightly above center -->
+    <div class="brand-mark">DoGood</div>
+
+    <section class="card">
+      <h1 class="h1">Build your community</h1>
+      <p class="muted">Create a new DoGood community or join one with a code.</p>
+
+      <form class="stack" action="{{ url_for('main.create_community') }}" method="GET">
+        <button class="btn primary" type="submit">Create a new community</button>
+      </form>
+
+      <div class="divider"><span>or</span></div>
+
+      <form class="row" action="{{ url_for('main.join_community') }}" method="POST">
+        <input class="input" name="code" placeholder="Enter invite code…" required />
+        <button class="btn mono" type="submit">Join</button>
+      </form>
+
+      <div class="sub-actions">
+        <a class="link" href="{{ url_for('main.login') }}">Already have an account? Log in</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

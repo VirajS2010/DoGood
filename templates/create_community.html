@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>DoGood — Create Community</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body class="green-solid">
+    <main class="center-stack">
+      <!-- Centered DoGood brand (smaller) -->
+      <div
+        class="brand-mark"
+        style="font-size: 32px; text-align: center; margin-bottom: 8px"
+      >
+        DoGood
+      </div>
+
+      <section class="card create-card">
+        <h1 class="h1">Create a community</h1>
+        <p class="muted">
+          Spin up a DoGood world for your colony, class, or club. After
+          creating, you’ll get an invite link and code to share.
+        </p>
+
+        {% if error %}
+        <div class="alert">{{ error }}</div>
+        {% endif %}
+
+        <form
+          action="{{ url_for('main.create_community') }}"
+          method="POST"
+          class="form-stack"
+        >
+          <label class="label">Community name</label>
+          <input
+            class="input big"
+            type="text"
+            name="community_name"
+            placeholder="e.g., Maple Residency, Grade 9-B, Tech Club"
+            required
+          />
+
+          <!-- one centered row with both actions -->
+          <div class="form-actions center">
+            <button class="btn primary jumbo" type="submit">
+              Create community
+            </button>
+            <a href="{{ url_for('main.index') }}" class="btn ghost"
+              >← Back to Home</a
+            >
+          </div>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

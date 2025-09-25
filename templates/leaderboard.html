@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>DoGood — Leaderboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+
+  <!-- Reuse feed-page to get the exact pill-nav look/behavior -->
+  <body class="green-solid feed-page">
+    <!-- Pill navbar (identical to feed) -->
+    <nav class="pill-nav">
+      <div class="pill-brand">DG</div>
+      <a href="{{ url_for('main.feed') }}" class="pill-link">Feed</a>
+      <a href="{{ url_for('main.leaderboard') }}" class="pill-link active">Leaderboard</a>
+      <a href="{{ url_for('main.create_post') }}" class="pill-link">Post</a>
+      <a href="{{ url_for('main.logout') }}" class="pill-link ghost">Logout</a>
+    </nav>
+
+    <!-- Content sits below the fixed nav using same spacing vars -->
+    <div class="feed-content">
+      <main class="center-stack" style="max-width: 820px">
+        <section class="card leader-card">
+          <h1 class="h1" style="margin-bottom: 6px">
+            {{ community.name }}'s Leaderboard
+          </h1>
+          <p class="muted">Top helpers in {{ community.name }}.</p>
+
+          {# capture top points for bar scaling #}
+          {% set maxp = namespace(v=1) %}
+
+          <!-- ✅ WRAP ADDED HERE -->
+          <div class="lb-table-wrap">
+            <ol class="board">
+              {% for u in users %}
+                {% if loop.first %}{% set maxp.v = (u.points or 1) %}{% endif %}
+                {% set rank = loop.index %}
+
+                <li class="board-row {% if rank <= 3 %}top{{rank}}{% endif %}">
+                  <div class="rank">#{{ rank }}</div>
+
+                  <img
+                    class="avatar"
+                    src="{{ u.profile_pic or '/static/images/default.png' }}"
+                    alt="{{ u.name }}"
+                    loading="lazy"
+                  />
+
+                  <div class="meta">
+                    <div class="name-line">
+                      <span class="name">{{ u.name }}</span>
+                      {% if rank == 1 %}<span class="badge gold">MVP</span>{% endif %}
+                      {% if rank == 2 %}<span class="badge silver">Runner-up</span>{% endif %}
+                      {% if rank == 3 %}<span class="badge bronze">Top 3</span>{% endif %}
+                    </div>
+
+                    <div class="bar" aria-hidden="true">
+                      <span style="width: {{ ((u.points or 0) / (maxp.v or 1) * 100) | round(1) }}%;"></span>
+                    </div>
+                  </div>
+
+                  <div class="points">{{ u.points or 0 }} pts</div>
+                </li>
+              {% endfor %}
+            </ol>
+          </div>
+          <!-- ✅ /WRAP -->
+
+          <div class="card-footer" style="justify-content: center; margin-top: 18px">
+            <a href="{{ url_for('main.feed') }}" class="btn ghost">← Back to Feed</a>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
